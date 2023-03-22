@@ -11,8 +11,10 @@ export class Home extends Component {
 
     handleChange(event) {
 
-        this.setState({ value: event.target.value });
-
+        this.setState({ value: event.target.value }, this.populateWeatherData);
+        console.log(event.target.value);
+        console.log(this.state.value);
+        console.log('end');
     };
 
     componentDidMount() {
@@ -163,10 +165,11 @@ export class Home extends Component {
     async populateWeatherData() {
         let formData = new FormData();
         //formData.append({ title: "test" });
+        console.log(this.state.value);
 
         const requestOptions = {
             method: 'POST',
-            headers: {title:'ttl'}
+            headers: { title: (this.state.value != ''? this.state.value :'test')}
             //headers: { 'Content-Type': 'application/json' },
             //body: formData//JSON.stringify({ title: 'React POST Request Example' })
         };

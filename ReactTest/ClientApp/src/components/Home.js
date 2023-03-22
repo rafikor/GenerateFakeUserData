@@ -6,8 +6,12 @@ export class Home extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { forecasts: [], loading: true, regions: [], regionsOptions: [], value: '', items: [] };
+        this.state = {
+            forecasts: [], loading: true, regions: [], regionsOptions: [], value: '',
+            items: [], errorsPerRecord: 5
+        };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeSlider = this.handleChangeSlider.bind(this);
     }
 
     handleChange(event) {
@@ -16,6 +20,15 @@ export class Home extends Component {
         console.log(event.target.value);
         console.log(this.state.value);
         console.log('end');
+    };
+
+    handleChangeSlider(event) {
+        if (event.target.value >= 0) { 
+        this.setState({ errorsPerRecord: event.target.value });
+    }
+        console.log(this.state.errorsPerRecord);
+        console.log(this.state.errorsPerRecord);
+        console.log(this.state.errorsPerRecord);
     };
 
     componentDidMount() {
@@ -206,6 +219,29 @@ export class Home extends Component {
         );
     }
 
+    renderSlider(value, handleChangeSlider) {
+        return (
+            <div>
+                <input
+                    type="number"
+                    placeholder="Your fav number"
+                    value={value}
+                    onChange={handleChangeSlider}
+                  />
+                <div className="slider-parent">
+                    <input type="range" min="0" max="10"
+                        onChange={handleChangeSlider}
+                        value={value}
+
+                    />
+                    <div className="buble">
+                        {value}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     render() {
 
 
@@ -223,13 +259,19 @@ export class Home extends Component {
         let contentsInfiniteScroll = this.state.loading
             ? <p><em>Loading...</em></p>
             : this.renderInfiniteScroll();
-        
+
+        let contentsRenderSlider = this.state.loading
+            ? <p><em>Loading...</em></p>
+            : this.renderSlider(this.state.errorsPerRecord, this.handleChangeSlider);
+
 
         return (
             <div>
                 <h1 id="tabelLabel" >Weather forecast</h1>
                 <p>This component demonstrates fetching data from the server.</p>
+                
                 {contentsRegions}
+                {contentsRenderSlider }
                 {contents}
                 {contentsInfiniteScroll}
             </div>

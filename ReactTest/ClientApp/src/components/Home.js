@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 export class Home extends Component {
     static displayName = Home.name;
 
     constructor(props) {
         super(props);
-        this.state = { forecasts: [], loading: true, regions: [], regionsOptions: [], value: '' };
+        this.state = { forecasts: [], loading: true, regions: [], regionsOptions: [], value: '', items: [] };
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -19,6 +20,7 @@ export class Home extends Component {
 
     componentDidMount() {
         this.populateRegionsList();
+        this.fetchData(1);
         this.populateWeatherData();
         /*console.log(this.regions[0]);
 
@@ -85,6 +87,37 @@ export class Home extends Component {
         );
     }*/
 
+    fetchData = async (page) => {
+        const newItems = [];
+        console.log('kek');
+        console.log(this.state.items.length);
+        console.log(page);
+
+        /*for (let i = 0; i < 100; i++) {
+            newItems.push(i)
+        }*/
+
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { title: (this.state.value != '' ? this.state.value : 'test'), lengthGeneratedPrev: this.state.items.length }
+            //headers: { 'Content-Type': 'application/json' },
+            //body: formData//JSON.stringify({ title: 'React POST Request Example' })
+        };
+        const response = await fetch('weatherforecast/GetForecast', requestOptions);
+        const data = await response.json();
+        for (let i = 0; i < data.length; i++) {
+            newItems.push(data[i].summary);
+        }
+        //this.setState({ forecasts: data, loading: false });
+
+        /*if (page === 100) {
+            this.setState({ hasMore: false })
+        }*/
+
+        this.setState({ items: [...this.state.items, ...newItems] })
+    }
+
     static renderDropdownRegions(regions, value, handleChange) {
          
         return (
@@ -138,6 +171,31 @@ export class Home extends Component {
         );
     }
 
+    renderInfiniteScroll() {
+        return (
+            <div>
+                <h1>Infinite Scroll</h1>
+                <InfiniteScroll
+                    dataLength={this.state.items.length}
+                    next={this.fetchData}
+                    hasMore="true"
+                    loader={<h4>Loading...</h4>}
+                    endMessage={
+                        <p style={{ textAlign: 'center' }}>
+                            <b>Yay! You have seen it all</b>
+                        </p>
+                    }
+                >
+                    {this.state.items.map((item, index) => (
+                        <div key={index}>
+                            {item}
+                        </div>
+                    ))}
+                </InfiniteScroll>
+            </div>
+        );
+    }
+
     render() {
 
 
@@ -152,12 +210,18 @@ export class Home extends Component {
             ? <p><em>Loading...</em></p>
             : Home.renderDropdownRegions(this.state.regions, this.state.value, this.handleChange);
 
+        let contentsInfiniteScroll = this.state.loading
+            ? <p><em>Loading...</em></p>
+            : this.renderInfiniteScroll();
+        
+
         return (
             <div>
                 <h1 id="tabelLabel" >Weather forecast</h1>
                 <p>This component demonstrates fetching data from the server.</p>
                 {contentsRegions}
                 {contents}
+                {contentsInfiniteScroll}
             </div>
         );
     }
@@ -169,7 +233,7 @@ export class Home extends Component {
 
         const requestOptions = {
             method: 'POST',
-            headers: { title: (this.state.value != ''? this.state.value :'test')}
+            headers: { title: (this.state.value != '' ? this.state.value : 'test'), lengthGeneratedPrev :0}
             //headers: { 'Content-Type': 'application/json' },
             //body: formData//JSON.stringify({ title: 'React POST Request Example' })
         };

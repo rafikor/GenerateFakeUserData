@@ -161,7 +161,16 @@ export class Home extends Component {
     }
 
     async populateWeatherData() {
-        const response = await fetch('weatherforecast/Get');
+        let formData = new FormData();
+        //formData.append({ title: "test" });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {title:'ttl'}
+            //headers: { 'Content-Type': 'application/json' },
+            //body: formData//JSON.stringify({ title: 'React POST Request Example' })
+        };
+        const response = await fetch('weatherforecast/GetForecast', requestOptions);
         const data = await response.json();
         this.setState({ forecasts: data, loading: false });
     }

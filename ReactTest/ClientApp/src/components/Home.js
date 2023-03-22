@@ -23,9 +23,9 @@ export class Home extends Component {
     };
 
     handleChangeSlider(event) {
-        if (event.target.value >= 0) { 
-        this.setState({ errorsPerRecord: event.target.value });
-    }
+        if (event.target.value >= 0) {
+            this.setState({ errorsPerRecord: event.target.value });
+        }
         console.log(this.state.errorsPerRecord);
         console.log(this.state.errorsPerRecord);
         console.log(this.state.errorsPerRecord);
@@ -229,7 +229,7 @@ export class Home extends Component {
                     onChange={handleChangeSlider}
                   />
                 <div className="slider-parent">
-                    <input type="range" min="0" max="10"
+                    <input type="range" min="0" max="10" step="0.25"
                         onChange={handleChangeSlider}
                         value={value}
 

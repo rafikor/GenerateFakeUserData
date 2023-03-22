@@ -3,7 +3,7 @@
 namespace ReactTest.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -28,6 +28,13 @@ namespace ReactTest.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet]
+        public IEnumerable<string> GetRegions()
+        {
+            var regions = new List<string>() { "USA","Belarus", "Georgia"};
+            return regions;
         }
     }
 }

@@ -7,7 +7,7 @@ export class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            forecasts: [], loading: true, regions: [], regionsOptions: [], value: '',
+            loading: true, regions: [], value: '',
             items: [], errorsPerRecord: 5
         };
         this.handleChange = this.handleChange.bind(this);
@@ -16,7 +16,7 @@ export class Home extends Component {
 
     handleChange(event) {
 
-        this.setState({ value: event.target.value }, this.populateWeatherData);
+        this.setState({ value: event.target.value }, () => { this.fetchData(0); });
         console.log(event.target.value);
         console.log(this.state.value);
         console.log('end');
@@ -24,7 +24,7 @@ export class Home extends Component {
 
     handleChangeSlider(event) {
         if (event.target.value >= 0) {
-            this.setState({ errorsPerRecord: event.target.value });
+            this.setState({ errorsPerRecord: event.target.value }, () => { this.fetchData(0); });
         }
         console.log(this.state.errorsPerRecord);
         console.log(this.state.errorsPerRecord);
@@ -131,7 +131,12 @@ export class Home extends Component {
             this.setState({ hasMore: false })
         }*/
 
-        this.setState({ items: [...this.state.items, ...newItems] })
+        if (page == 0) {
+            this.setState({ items: newItems })
+        }
+        else {
+            this.setState({ items: [...this.state.items, ...newItems] })
+        }
     }
 
     static renderDropdownRegions(regions, value, handleChange) {
@@ -162,7 +167,7 @@ export class Home extends Component {
             );
     }
 
-    static renderForecastsTable(forecasts) {
+    /*static renderForecastsTable(forecasts) {
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -185,7 +190,7 @@ export class Home extends Component {
                 </tbody>
             </table>
         );
-    }
+    }*/
 
     renderInfiniteScroll() {
         return (
@@ -251,9 +256,9 @@ export class Home extends Component {
         //const [value, setValue] = React.useState(this.regions[0]);
         //const [value, setValue] = React.useState(this.state.regions[0]);
 
-        let contents = this.state.loading
+        /*let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : Home.renderForecastsTable(this.state.forecasts);
+            : Home.renderForecastsTable(this.state.forecasts);*/
 
         let contentsRegions = this.state.loading
             ? <p><em>Loading...</em></p>
@@ -275,13 +280,12 @@ export class Home extends Component {
                 
                 {contentsRegions}
                 {contentsRenderSlider }
-                {contents}
                 {contentsInfiniteScroll}
             </div>
         );
     }
 
-    async populateWeatherData() {
+    /*async populateWeatherData() {
         let formData = new FormData();
         //formData.append({ title: "test" });
         console.log(this.state.value);
@@ -295,14 +299,14 @@ export class Home extends Component {
         const response = await fetch('weatherforecast/GetForecast', requestOptions);
         const data = await response.json();
         this.setState({ forecasts: data, loading: false });
-    }
+    }*/
 
     async populateRegionsList() {
         const response = await fetch('weatherforecast/GetRegions');
         const data = await response.json();
         this.setState({ regions: data, loading: false }, ()=>{
             if (this.state.regions.length > 0) {
-                this.setState({ value: this.state.regions[0] }, () => { this.fetchData(0); this.populateWeatherData(); });
+                this.setState({ value: this.state.regions[0] }, () => { this.fetchData(0);});
             } });
     }
 };

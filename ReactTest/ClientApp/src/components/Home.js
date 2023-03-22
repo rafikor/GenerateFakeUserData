@@ -173,26 +173,36 @@ export class Home extends Component {
 
     renderInfiniteScroll() {
         return (
-            <div>
-                <h1>Infinite Scroll</h1>
-                <InfiniteScroll
-                    dataLength={this.state.items.length}
-                    next={this.fetchData}
-                    hasMore="true"
-                    loader={<h4>Loading...</h4>}
-                    endMessage={
-                        <p style={{ textAlign: 'center' }}>
-                            <b>Yay! You have seen it all</b>
-                        </p>
-                    }
-                >
-                    {this.state.items.map((item, index) => (
-                        <div key={index}>
-                            {item}
-                        </div>
-                    ))}
-                </InfiniteScroll>
-            </div>
+            <InfiniteScroll
+                dataLength={this.state.items.length}
+                next={this.fetchData}
+                hasMore="true"
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                    <p style={{ textAlign: 'center' }}>
+                        <b>Yay! You have seen it all</b>
+                    </p>
+                }
+            >
+            <table className='table table-striped' aria-labelledby="tabelLabelTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Temp. (C)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {this.state.items.map((item, index) => 
+                        <tr key={item}>
+                            <td>{item}</td>
+                            <td>{item}{index}</td>
+                        </tr>
+                    )}
+                    
+                </tbody>
+                </table>
+            </InfiniteScroll>
         );
     }
 

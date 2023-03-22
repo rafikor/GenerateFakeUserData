@@ -33,8 +33,11 @@ export class Home extends Component {
 
     componentDidMount() {
         this.populateRegionsList();
-        this.fetchData(1);
-        this.populateWeatherData();
+        console.log(this.state.regions.length);
+
+        
+        
+        
         /*console.log(this.regions[0]);
 
         for (let i = 0; i < this.regions.Length(); i++) {
@@ -297,7 +300,10 @@ export class Home extends Component {
     async populateRegionsList() {
         const response = await fetch('weatherforecast/GetRegions');
         const data = await response.json();
-        this.setState({ regions: data, loading: false });
+        this.setState({ regions: data, loading: false }, ()=>{
+            if (this.state.regions.length > 0) {
+                this.setState({ value: this.state.regions[0] }, () => { this.fetchData(0); this.populateWeatherData(); });
+            } });
     }
 };
 

@@ -21,14 +21,14 @@ namespace ReactTest.Controllers
 
         [HttpPost]
         public IEnumerable<UserDataModel> GetForecast([FromHeader] string selectedRegion, 
-            [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
+            [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] uint randomSeed)
         {
 
             int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
             return Enumerable.Range(1, howMuchGenerate).Select(index => new UserDataModel
             {
                 number = index+ lengthGeneratedPrev,
-                randomId = Convert.ToString(5),
+                randomId = Convert.ToString(randomSeed),
                 fullName = selectedRegion+"name",
                 adress = selectedRegion + "adress",
                 phone = selectedRegion + "phone"

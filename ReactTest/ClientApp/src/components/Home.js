@@ -3,15 +3,20 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 export class Home extends Component {
     static displayName = Home.name;
+    static minRandomNumber = 0;
+    static maxRandomNumber = 4294967295;
+    
 
     constructor(props) {
         super(props);
         this.state = {
             loading: true, regions: [], value: '',
-            items: [], errorsPerRecord: 5, randomSeed:0
+            items: [], errorsPerRecord: 5, randomSeed:3
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
+        this.handleChangeRandomID = this.handleChangeRandomID.bind(this);
+        this.handleGenerateRandomID = this.handleGenerateRandomID.bind(this);
     }
 
     handleChange(event) {
@@ -29,6 +34,20 @@ export class Home extends Component {
         console.log(this.state.errorsPerRecord);
         console.log(this.state.errorsPerRecord);
         console.log(this.state.errorsPerRecord);
+    };
+
+    handleChangeRandomID(event) {
+        this.setState({ randomSeed: event.target.value }, () => { this.fetchData(0); });
+    };
+
+    randomNumberInRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+    handleGenerateRandomID(event) {
+        let random = this.randomNumberInRange(Home.minRandomNumber, Home.maxRandomNumber);
+        console.log(random);
+        this.setState({ randomSeed: random }, () => { this.fetchData(0); });
     };
 
     componentDidMount() {
@@ -204,7 +223,7 @@ export class Home extends Component {
                 loader={<h4>Loading...</h4>}
                 endMessage={
                     <p style={{ textAlign: 'center' }}>
-                        <b>Yay! You have seen it all</b>
+                        <b>You have seen it all</b>
                     </p>
                 }
             >
@@ -259,6 +278,21 @@ export class Home extends Component {
         );
     }
 
+    renderRandomSeedID(value) {
+        return (
+            <div>
+                Random seed: 
+                <input
+                    type="number"
+                    placeholder="Your fav number"
+                    value={value}
+                    onChange={this.handleChangeRandomID}
+                />
+                    <button variant="contained" onClick={this.handleGenerateRandomID}>Update</button>
+            </div>
+        );
+    }
+
     render() {
 
 
@@ -272,6 +306,10 @@ export class Home extends Component {
         let contentsRegions = this.state.loading
             ? <p><em>Loading...</em></p>
             : Home.renderDropdownRegions(this.state.regions, this.state.value, this.handleChange);
+
+        let contentsRandomNumber = this.state.loading
+            ? <p><em>Loading...</em></p>
+            : this.renderRandomSeedID(this.state.randomSeed);
 
         let contentsInfiniteScroll = this.state.loading
             ? <p><em>Loading...</em></p>
@@ -288,7 +326,8 @@ export class Home extends Component {
                 <p>This component demonstrates fetching data from the server.</p>
                 
                 {contentsRegions}
-                {contentsRenderSlider }
+                {contentsRandomNumber}
+                {contentsRenderSlider}
                 {contentsInfiniteScroll}
             </div>
         );

@@ -39,7 +39,7 @@ namespace ReactTest.Controllers
         [HttpGet]
         public IEnumerable<string> GetRegions()
         {
-            var regions = new List<string>() { "USA","Belarus", "Georgia"};
+            var regions = new List<string>() { "USA","Belarus", "Poland"};
             return regions;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReactTest.Models;
 
 namespace ReactTest.Controllers
 {
@@ -19,14 +20,18 @@ namespace ReactTest.Controllers
         }
 
         [HttpPost]
-        public IEnumerable<WeatherForecast> GetForecast([FromHeader] string title, [FromHeader] int lengthGeneratedPrev)
+        public IEnumerable<UserDataModel> GetForecast([FromHeader] string selectedRegion, 
+            [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
+
             int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
-            return Enumerable.Range(1, howMuchGenerate).Select(index => new WeatherForecast
+            return Enumerable.Range(1, howMuchGenerate).Select(index => new UserDataModel
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)] + title+ lengthGeneratedPrev.ToString()
+                number = index+ lengthGeneratedPrev,
+                randomId = Convert.ToString(5),
+                fullName = selectedRegion+"name",
+                adress = selectedRegion + "adress",
+                phone = selectedRegion + "phone"
             })
             .ToArray();
         }

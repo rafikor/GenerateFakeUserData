@@ -8,7 +8,7 @@ export class Home extends Component {
         super(props);
         this.state = {
             loading: true, regions: [], value: '',
-            items: [], errorsPerRecord: 5
+            items: [], errorsPerRecord: 5, randomSeed:0
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
@@ -116,14 +116,17 @@ export class Home extends Component {
 
         const requestOptions = {
             method: 'POST',
-            headers: { title: (this.state.value != '' ? this.state.value : 'test'), lengthGeneratedPrev: this.state.items.length }
+            headers: {
+                selectedRegion: this.state.value, lengthGeneratedPrev: page == 0 ?0:this.state.items.length,
+                errorsPerRecord: this.state.errorsPerRecord, randomSeed: this.state.randomSeed
+            }
             //headers: { 'Content-Type': 'application/json' },
             //body: formData//JSON.stringify({ title: 'React POST Request Example' })
         };
         const response = await fetch('weatherforecast/GetForecast', requestOptions);
         const data = await response.json();
         for (let i = 0; i < data.length; i++) {
-            newItems.push(data[i].summary);
+            newItems.push(data[i]);
         }
         //this.setState({ forecasts: data, loading: false });
 
@@ -208,16 +211,22 @@ export class Home extends Component {
             <table className='table table-striped' aria-labelledby="tabelLabelTable">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
+                        <th>Index</th>
+                        <th>Random identifier</th>
+                            <th>Full name</th>
+                            <th>Adress</th>
+                            <th>Phone</th>
                     </tr>
                 </thead>
                 <tbody>
                     
                     {this.state.items.map((item, index) => 
-                        <tr key={item}>
-                            <td>{item}</td>
-                            <td>{item}{index}</td>
+                        <tr key={item.number}>
+                            <td>{item.number}</td>
+                            <td>{item.randomId}</td>
+                            <td>{item.fullName}</td>
+                            <td>{item.adress}</td>
+                            <td>{item.phone}</td>
                         </tr>
                     )}
                     

@@ -52,7 +52,7 @@ namespace ReactTest.Utils
                 {
                     adress.Append(" " + room);
                 }
-                adress.Append(", " + index);
+                adress.Append(", " + indexPoland);
                 adress.Append(" " + livingPlace);
             }
             else
@@ -73,7 +73,7 @@ namespace ReactTest.Utils
                     {
                         adress.Append(" " + room);
                     }
-                    adress.Append(", " + index);
+                    adress.Append(", " + indexPoland);
                 }
                 else
                 {
@@ -97,7 +97,7 @@ namespace ReactTest.Utils
                     }
                     adress.Append(livingPlace);
                     
-                    adress.Append(", " + index);
+                    adress.Append(", " + indexPoland);
                 }
             }
             if (countryName != "")

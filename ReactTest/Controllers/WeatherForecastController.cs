@@ -34,7 +34,8 @@ namespace ReactTest.Controllers
             [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
             //var belarusRecordsGenerator = new BelarusUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\belarus");
-            var polandUserDataGenerator = new PolandUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Poland");
+            //var polandUserDataGenerator = new PolandUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Poland")
+            var usaUserDataGenerator = new USAUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\USA");
 
             int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
             var resultingRecords = new List<UserDataModel>();
@@ -47,7 +48,7 @@ namespace ReactTest.Controllers
             int previousRandomSeed = currentRandomSeed;
             for (int newRecordNumber = 0; newRecordNumber < howMuchGenerate; newRecordNumber++)
             {
-                UserDataModel resultRecord = polandUserDataGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed ,isRegenerateSeed, out currentRandomSeed);
+                UserDataModel resultRecord = usaUserDataGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed ,isRegenerateSeed, out currentRandomSeed);
                 resultRecord.number = newRecordNumber + lengthGeneratedPrev + 1;
                 previousRandomSeed = currentRandomSeed;//for repeatability
                 resultingRecords.Add(resultRecord);

@@ -41,12 +41,19 @@ export class Home extends Component {
         this.setState({ randomSeed: event.target.value }, () => { this.fetchData(0); });
     };
 
+    
+
     handleDownloadCSV(event) {
-        fetch("weatherforecast/DownloadCsv",
-            {
-                method: "GET",
-                headers: { "Content-Type": "text/csv" },
-            }).then((responce) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                selectedRegion: this.state.value, lengthToGenerate: this.state.items.length,
+                errorsPerRecord: this.state.errorsPerRecord, randomSeed: this.state.randomSeed,
+                "Content-Type": "text/csv"
+            }
+        };
+        fetch("weatherforecast/DownloadCsv", requestOptions)
+            .then((responce) => {
                  let fileName = 'result.csv';
                      var t = responce.body.getReader();
                      t.read().then(({ done, value }) => {

@@ -8,6 +8,9 @@ using System.Text;
 using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using ReactTest.Utils;
+using Microsoft.AspNetCore.WebUtilities;
+using ServiceStack.Text;
+using ServiceStack;
 
 namespace ReactTest.Controllers
 {
@@ -38,20 +41,28 @@ namespace ReactTest.Controllers
         public IEnumerable<UserDataModel> GetForecast([FromHeader] string selectedRegion,
             [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
+            int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
+            return GenerateRecords(selectedRegion,
+            lengthGeneratedPrev, errorsPerRecord, randomSeed, howMuchGenerate);
+        }
+
+        private IEnumerable<UserDataModel>  GenerateRecords(string selectedRegion,
+            int lengthGeneratedPrev, double errorsPerRecord, int randomSeed, int countToGenerate)
+        {
             BaseUserDataGenerator dataGenerator = dataGenerators[selectedRegion];
 
-            int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
+            
             var resultingRecords = new List<UserDataModel>();
             int currentRandomSeed = randomSeed;
             bool isRegenerateSeed = false;
-            if (lengthGeneratedPrev>0)
+            if (lengthGeneratedPrev > 0)
             {
                 isRegenerateSeed = true;
             }
             int previousRandomSeed = currentRandomSeed;
-            for (int newRecordNumber = 0; newRecordNumber < howMuchGenerate; newRecordNumber++)
+            for (int newRecordNumber = 0; newRecordNumber < countToGenerate; newRecordNumber++)
             {
-                UserDataModel resultRecord = dataGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed ,isRegenerateSeed, out currentRandomSeed);
+                UserDataModel resultRecord = dataGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed, isRegenerateSeed, out currentRandomSeed);
                 resultRecord.number = newRecordNumber + lengthGeneratedPrev + 1;
                 previousRandomSeed = currentRandomSeed;//for repeatability
                 resultingRecords.Add(resultRecord);
@@ -67,11 +78,15 @@ namespace ReactTest.Controllers
             return dataGenerators.Keys;
         }
 
-        [HttpGet]
-        public FileResult DownloadCsv()
+        [HttpPost]
+        public FileResult DownloadCsv([FromHeader] string selectedRegion,
+            [FromHeader] int lengthToGenerate, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
-            string fileName = "E:\\programming\\Itransition\\ReactTest\\data\\USA\\majorCities.csv";
-            byte[] fileBytes = System.IO.File.ReadAllBytes(fileName);
+            var records = GenerateRecords(selectedRegion,0, errorsPerRecord, randomSeed, lengthToGenerate);
+            var result = CsvSerializer.SerializeToCsv(records);
+            //string fileName = "E:\\programming\\Itransition\\ReactTest\\data\\USA\\majorCities.csv";
+
+            byte[] fileBytes = result.ToUtf8Bytes();
 
             return File(fileBytes, "text/csv", "result.csv"); // this is the key!
         }

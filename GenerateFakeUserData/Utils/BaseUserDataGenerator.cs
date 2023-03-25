@@ -1,10 +1,10 @@
-﻿using ReactTest.Models;
+﻿using GenerateFakeUserData.Models;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace ReactTest.Utils
+namespace GenerateFakeUserData.Utils
 {
     public abstract class BaseUserDataGenerator
     {

@@ -2,7 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Text;
 
-namespace ReactTest.Utils
+namespace GenerateFakeUserData.Utils
 {
     public class BelarusUserDataGenerator : BaseUserDataGenerator
     {

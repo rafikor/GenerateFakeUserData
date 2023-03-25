@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System;
 
-namespace ReactTest.Utils
+namespace GenerateFakeUserData.Utils
 {
     public class USAUserDataGenerator : BaseUserDataGenerator
     {

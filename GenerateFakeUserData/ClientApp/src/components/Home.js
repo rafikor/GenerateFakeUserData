@@ -10,31 +10,25 @@ export class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true, regions: [], value: '',
+            loading: true, regions: [], selectedRegion: '',
             items: [], errorsPerRecord: 5, randomSeed:306412873, oldSeed:0
         };
-        this.handleChange = this.handleChange.bind(this);
+        this.handleChangeRegion = this.handleChangeRegion.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
         this.handleChangeRandomID = this.handleChangeRandomID.bind(this);
         this.handleGenerateRandomID = this.handleGenerateRandomID.bind(this);
         this.handleDownloadCSV = this.handleDownloadCSV.bind(this);
     }
 
-    handleChange(event) {
+    handleChangeRegion(event) {
 
-        this.setState({ value: event.target.value }, () => { this.fetchData(0); });
-        console.log(event.target.value);
-        console.log(this.state.value);
-        console.log('end');
+        this.setState({ selectedRegion: event.target.value }, () => { this.fetchData(0); });
     };
 
     handleChangeSlider(event) {
         if (event.target.value >= 0) {
             this.setState({ errorsPerRecord: event.target.value }, () => { this.fetchData(0); });
         }
-        console.log(this.state.errorsPerRecord);
-        console.log(this.state.errorsPerRecord);
-        console.log(this.state.errorsPerRecord);
     };
 
     handleChangeRandomID(event) {
@@ -47,17 +41,16 @@ export class Home extends Component {
         const requestOptions = {
             method: 'POST',
             headers: {
-                selectedRegion: this.state.value, lengthToGenerate: this.state.items.length,
+                selectedRegion: this.state.selectedRegion, lengthToGenerate: this.state.items.length,
                 errorsPerRecord: this.state.errorsPerRecord, randomSeed: this.state.randomSeed,
                 "Content-Type": "text/csv"
             }
         };
-        fetch("weatherforecast/DownloadCsv", requestOptions)
+        fetch("GenerateFakeUser/DownloadCsv", requestOptions)
             .then((responce) => {
                  let fileName = 'result.csv';
                      var t = responce.body.getReader();
                      t.read().then(({ done, value }) => {
-                         console.log(value);
                          const url = window.URL.createObjectURL(
                              new Blob([value], {
                                  type: 'text/csv',
@@ -82,39 +75,32 @@ export class Home extends Component {
 
     handleGenerateRandomID(event) {
         let random = this.randomNumberInRange(Home.minRandomNumber, Home.maxRandomNumber);
-        console.log(random);
         this.setState({ randomSeed: random }, () => { this.fetchData(0); });
     };
 
     componentDidMount() {
         this.populateRegionsList();
-        console.log(this.state.regions.length);
     };
 
     fetchData = async (page) => {
         const newItems = [];
-        console.log('kek');
-        console.log(this.state.items.length);
-        console.log(page);
 
         let currentRandomSeedToSend = this.state.randomSeed;
         if (page != 0) {
             currentRandomSeedToSend = this.state.oldSeed;
         }
-
         const requestOptions = {
             method: 'POST',
             headers: {
-                selectedRegion: this.state.value, lengthGeneratedPrev: page == 0 ?0:this.state.items.length,
+                selectedRegion: this.state.selectedRegion, lengthGeneratedPrev: page == 0 ?0:this.state.items.length,
                 errorsPerRecord: this.state.errorsPerRecord, randomSeed: currentRandomSeedToSend
             }
         };
-        const response = await fetch('weatherforecast/GetForecast', requestOptions);
+        const response = await fetch('GenerateFakeUser/GetNewData', requestOptions);
         const data = await response.json();
         for (let i = 0; i < data.length; i++) {
             newItems.push(data[i]);
         }
-        console.log(data.length);
         this.setState({ oldSeed: data[data.length - 1].randomId });
 
         if (page == 0) {
@@ -129,11 +115,9 @@ export class Home extends Component {
          
         return (
             <div>
-
-
                 <label>
 
-                    Target region
+                    Target region:&nbsp;
 
                     <select value={value} onChange={handleChange}>
 
@@ -199,7 +183,6 @@ export class Home extends Component {
             <div>
                 <input
                     type="number"
-                    placeholder="Your fav number"
                     value={value}
                     onChange={handleChangeSlider}
                   />
@@ -220,10 +203,9 @@ export class Home extends Component {
     renderRandomSeedID(value) {
         return (
             <div>
-                Random seed: 
+                Random seed:&nbsp;
                 <input
                     type="number"
-                    placeholder="Your fav number"
                     value={value}
                     onChange={this.handleChangeRandomID}
                 />
@@ -244,7 +226,7 @@ export class Home extends Component {
 
         let contentsRegions = this.state.loading
             ? <p><em>Loading...</em></p>
-            : Home.renderDropdownRegions(this.state.regions, this.state.value, this.handleChange);
+            : Home.renderDropdownRegions(this.state.regions, this.state.selectedRegion, this.handleChangeRegion);
 
         let contentsRandomNumber = this.state.loading
             ? <p><em>Loading...</em></p>
@@ -264,8 +246,8 @@ export class Home extends Component {
 
         return (
             <div>
-                <h1 id="tabelLabel" >Weather forecast</h1>
-                <p>This component demonstrates fetching data from the server.</p>
+                <h1 id="tabelLabel" >Fake user data</h1>
+                <p>This application demonstrates generation of fake user data for different regions.</p>
                 
                 {contentsRegions}
                 {contentsRandomNumber}
@@ -277,14 +259,11 @@ export class Home extends Component {
     }
 
     async populateRegionsList() {
-        const response = await fetch('weatherforecast/GetRegions');
+        const response = await fetch('GenerateFakeUser/getregions');
         const data = await response.json();
         this.setState({ regions: data, loading: false }, ()=>{
             if (this.state.regions.length > 0) {
-                this.setState({ value: this.state.regions[0] }, () => { this.fetchData(0);});
+                this.setState({ selectedRegion: this.state.regions[0] }, () => { this.fetchData(0); });
             } });
     }
 };
-
-
-

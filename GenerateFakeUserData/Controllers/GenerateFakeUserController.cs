@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReactTest.Models;
+using GenerateFakeUserData.Models;
 using System.Formats.Asn1;
 using System.Globalization;
 using System;
@@ -7,22 +7,22 @@ using Microsoft.AspNetCore.Hosting.Server;
 using System.Text;
 using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
-using ReactTest.Utils;
+using GenerateFakeUserData.Utils;
 using Microsoft.AspNetCore.WebUtilities;
 using ServiceStack.Text;
 using ServiceStack;
 
-namespace ReactTest.Controllers
+namespace GenerateFakeUserData.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class WeatherForecastController : ControllerBase
+    public class GenerateFakeUserController : ControllerBase
     {
         private static Dictionary<string,BaseUserDataGenerator> dataGenerators;
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<GenerateFakeUserController> _logger;
 
-        static WeatherForecastController()
+        static GenerateFakeUserController()
         {
             dataGenerators = new Dictionary<string,BaseUserDataGenerator>();
             dataGenerators.Add("USA", new USAUserDataGenerator(Path.Combine("data","USA")));
@@ -30,13 +30,13 @@ namespace ReactTest.Controllers
             dataGenerators.Add("Poland", new PolandUserDataGenerator(Path.Combine("data", "Poland")));
         }
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public GenerateFakeUserController(ILogger<GenerateFakeUserController> logger)
         {
             _logger = logger;
         }
 
         [HttpPost]
-        public IEnumerable<UserDataModel> GetForecast([FromHeader] string selectedRegion,
+        public IEnumerable<UserDataModel> GetNewData([FromHeader] string selectedRegion,
             [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
             int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;

@@ -17,6 +17,7 @@ export class Home extends Component {
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
         this.handleChangeRandomID = this.handleChangeRandomID.bind(this);
         this.handleGenerateRandomID = this.handleGenerateRandomID.bind(this);
+        this.handleDownloadCSV = this.handleDownloadCSV.bind(this);
     }
 
     handleChange(event) {
@@ -40,6 +41,34 @@ export class Home extends Component {
         this.setState({ randomSeed: event.target.value }, () => { this.fetchData(0); });
     };
 
+    handleDownloadCSV(event) {
+        fetch("weatherforecast/DownloadCsv",
+            {
+                method: "GET",
+                headers: { "Content-Type": "text/csv" },
+            }).then((responce) => {
+                 let fileName = 'result.csv';
+                     var t = responce.body.getReader();
+                     t.read().then(({ done, value }) => {
+                         console.log(value);
+                         const url = window.URL.createObjectURL(
+                             new Blob([value], {
+                                 type: 'text/csv',
+                                 encoding: 'UTF-8'
+                             })
+                         );
+                         const link = document.createElement('a');
+                         link.href = url;
+                         link.setAttribute('download', fileName);
+                         document.body.appendChild(link);
+                         link.click();
+                         link.remove();
+                     });
+         });
+
+    };
+
+    
     randomNumberInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -299,6 +328,14 @@ export class Home extends Component {
         );
     }
 
+    renderDownloadCSV() {
+        return (
+            <div>
+                <button variant="contained" onClick={this.handleDownloadCSV}>Download CSV</button>
+            </div>
+        );
+    }
+
     render() {
 
 
@@ -325,6 +362,9 @@ export class Home extends Component {
             ? <p><em>Loading...</em></p>
             : this.renderSlider(this.state.errorsPerRecord, this.handleChangeSlider);
 
+        let contentsRenderDownloadCSV = this.state.loading
+            ? <p><em>Loading...</em></p>
+            : this.renderDownloadCSV();
 
         return (
             <div>
@@ -334,6 +374,7 @@ export class Home extends Component {
                 {contentsRegions}
                 {contentsRandomNumber}
                 {contentsRenderSlider}
+                {contentsRenderDownloadCSV}
                 {contentsInfiniteScroll}
             </div>
         );

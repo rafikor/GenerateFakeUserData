@@ -66,5 +66,14 @@ namespace ReactTest.Controllers
         {
             return dataGenerators.Keys;
         }
+
+        [HttpGet]
+        public FileResult DownloadCsv()
+        {
+            string fileName = "E:\\programming\\Itransition\\ReactTest\\data\\USA\\majorCities.csv";
+            byte[] fileBytes = System.IO.File.ReadAllBytes(fileName);
+
+            return File(fileBytes, "text/csv", "result.csv"); // this is the key!
+        }
     }
 }

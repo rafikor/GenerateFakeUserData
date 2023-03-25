@@ -35,8 +35,6 @@ namespace ReactTest.Controllers
             _logger = logger;
         }
 
-       
-
         [HttpPost]
         public IEnumerable<UserDataModel> GetForecast([FromHeader] string selectedRegion,
             [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
@@ -84,11 +82,9 @@ namespace ReactTest.Controllers
         {
             var records = GenerateRecords(selectedRegion,0, errorsPerRecord, randomSeed, lengthToGenerate);
             var result = CsvSerializer.SerializeToCsv(records);
-            //string fileName = "E:\\programming\\Itransition\\ReactTest\\data\\USA\\majorCities.csv";
-
             byte[] fileBytes = result.ToUtf8Bytes();
 
-            return File(fileBytes, "text/csv", "result.csv"); // this is the key!
+            return File(fileBytes, "text/csv", "result.csv");
         }
     }
 }

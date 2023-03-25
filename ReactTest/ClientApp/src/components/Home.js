@@ -89,84 +89,13 @@ export class Home extends Component {
     componentDidMount() {
         this.populateRegionsList();
         console.log(this.state.regions.length);
-
-        
-        
-        
-        /*console.log(this.regions[0]);
-
-        for (let i = 0; i < this.regions.Length(); i++) {
-            this.regionsOptions[i] = { Label: this.regions[i], Value: this.regions[i] }
-        };*/
-        
     };
-
-
-    /*static renderDropdownRegions() {
-
-
-        const handleChange = (event) => {
-
-            setValue(event.target.value);
-
-        };
-        const Dropdown = ({ label, value, options, onChange }) => {
-
-            return (
-
-                <label>
-
-                    {label}
-
-                    <select value={value} onChange={onChange}>
-
-                        {options.map((option) => (
-
-                            <option value={option.value}>{option.label}</option>
-
-                        ))}
-
-                    </select>
-
-                </label>
-
-            );
-        };
-        return (
-            <div>
-
-
-                <label>
-
-                    "Target region"
-
-                    <select value="value">
-
-                        {this.regionsOptions.map((option) => (
-
-                            <option value={option.value}>{option.label}</option>
-
-                        ))}
-
-                    </select>
-
-                </label>
-
-            <p>We eat value!</p>
-
-        </div>
-        );
-    }*/
 
     fetchData = async (page) => {
         const newItems = [];
         console.log('kek');
         console.log(this.state.items.length);
         console.log(page);
-
-        /*for (let i = 0; i < 100; i++) {
-            newItems.push(i)
-        }*/
 
         let currentRandomSeedToSend = this.state.randomSeed;
         if (page != 0) {
@@ -179,8 +108,6 @@ export class Home extends Component {
                 selectedRegion: this.state.value, lengthGeneratedPrev: page == 0 ?0:this.state.items.length,
                 errorsPerRecord: this.state.errorsPerRecord, randomSeed: currentRandomSeedToSend
             }
-            //headers: { 'Content-Type': 'application/json' },
-            //body: formData//JSON.stringify({ title: 'React POST Request Example' })
         };
         const response = await fetch('weatherforecast/GetForecast', requestOptions);
         const data = await response.json();
@@ -189,11 +116,6 @@ export class Home extends Component {
         }
         console.log(data.length);
         this.setState({ oldSeed: data[data.length - 1].randomId });
-        //this.setState({ forecasts: data, loading: false });
-
-        /*if (page === 100) {
-            this.setState({ hasMore: false })
-        }*/
 
         if (page == 0) {
             this.setState({ items: newItems })
@@ -230,31 +152,6 @@ export class Home extends Component {
             </div>
             );
     }
-
-    /*static renderForecastsTable(forecasts) {
-        return (
-            <table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {forecasts.map(forecast =>
-                        <tr key={forecast.date}>
-                            <td>{forecast.date}</td>
-                            <td>{forecast.temperatureC}</td>
-                            <td>{forecast.temperatureF}</td>
-                            <td>{forecast.summary}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        );
-    }*/
 
     renderInfiniteScroll() {
         return (
@@ -345,14 +242,6 @@ export class Home extends Component {
 
     render() {
 
-
-        //const [value, setValue] = React.useState(this.regions[0]);
-        //const [value, setValue] = React.useState(this.state.regions[0]);
-
-        /*let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
-            : Home.renderForecastsTable(this.state.forecasts);*/
-
         let contentsRegions = this.state.loading
             ? <p><em>Loading...</em></p>
             : Home.renderDropdownRegions(this.state.regions, this.state.value, this.handleChange);
@@ -386,22 +275,6 @@ export class Home extends Component {
             </div>
         );
     }
-
-    /*async populateWeatherData() {
-        let formData = new FormData();
-        //formData.append({ title: "test" });
-        console.log(this.state.value);
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { title: (this.state.value != '' ? this.state.value : 'test'), lengthGeneratedPrev :0}
-            //headers: { 'Content-Type': 'application/json' },
-            //body: formData//JSON.stringify({ title: 'React POST Request Example' })
-        };
-        const response = await fetch('weatherforecast/GetForecast', requestOptions);
-        const data = await response.json();
-        this.setState({ forecasts: data, loading: false });
-    }*/
 
     async populateRegionsList() {
         const response = await fetch('weatherforecast/GetRegions');

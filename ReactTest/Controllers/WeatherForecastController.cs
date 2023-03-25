@@ -190,15 +190,15 @@ namespace ReactTest.Controllers
                     }
                 }
 
-                var stringAdress = "";
+                var stringAdress = new StringBuilder();
                 foreach (var adresspart in adress)
                 {
                     if (adresspart.Length > 0)
                     {
-                        stringAdress += adresspart + ", ";
+                        stringAdress.Append(adresspart + ", ");
                     }
                 }
-                stringAdress = stringAdress.Substring(0, stringAdress.Length - 2);
+                stringAdress.Remove(stringAdress.Length - 2,2);
 
 
 
@@ -219,22 +219,22 @@ namespace ReactTest.Controllers
                     }
                     phoneEnd += letter;
                 }
-                var phoneNumber = phoneCodesBeginning + phoneEnd;
+                var phoneNumber = new StringBuilder();
+                phoneNumber.Append(phoneCodesBeginning);
+                phoneNumber.Append(phoneEnd);
 
-                var fullName = "";
-
-
+                var fullName = new StringBuilder();
 
                 bool isMale = random.Next(2) == 0;
                 if (isMale)
                 {
-                    fullName = getRandomElement(maleSurnames, random) + " " + getRandomElement(maleNames, random) +
-                        " " + getRandomElement(malePatronymics, random);
+                    fullName.Append(getRandomElement(maleSurnames, random) + " " + getRandomElement(maleNames, random) +
+                        " " + getRandomElement(malePatronymics, random));
                 }
                 else
                 {
-                    fullName = getRandomElement(femaleSurnames, random) + " " + getRandomElement(femaleNames, random) +
-                        " " + getRandomElement(femalePatronymics, random);
+                    fullName.Append(getRandomElement(femaleSurnames, random) + " " + getRandomElement(femaleNames, random) +
+                        " " + getRandomElement(femalePatronymics, random));
                 }
 
                 int intPartOfErrorsPerRecord = (int)errorsPerRecord;
@@ -247,7 +247,7 @@ namespace ReactTest.Controllers
                 }
 
                 //string fullRecord = fullName + '@' + stringAdress + '@' + phoneNumber;
-                var changedData = new string[] { fullName, stringAdress, phoneNumber };
+                var changedData = new StringBuilder[] { fullName, stringAdress, phoneNumber };
                 for (int i = 0; i < intErrorsPerRecord; i++)
                 {
                     int errorLocation = random.Next(3);
@@ -257,44 +257,46 @@ namespace ReactTest.Controllers
                     switch (errorType)
                     {
                         case 0://remove
-                            var result = changedData[errorLocation].Substring(0, errorPosition);
-                            if (errorPosition + 1 < changedData[errorLocation].Length)
+                            if (changedData[errorLocation].Length > 0)
                             {
-                                result = result + changedData[errorLocation].Substring(errorPosition + 1);
+                                changedData[errorLocation].Remove(errorPosition, 1);
                             }
                             break;
                         case 1://add
                             var symbolToAdd = errorLocation == 2 ? random.Next(10).ToString() : alphabet[random.Next(alphabet.Length)].ToString();
-                            changedData[errorLocation] = changedData[errorLocation].Insert(errorPosition, symbolToAdd);
+                            changedData[errorLocation].Insert(errorPosition, symbolToAdd);
                             //changedData[errorLocation] = changedData[errorLocation].Substring(0, errorPosition) +
                             //    symbolToAdd + changedData[errorLocation].Substring(errorPosition);
                             break;
                         default://swap
                             if (changedData[errorLocation].Length > 1)
                             {
-                                if (errorPosition != changedData[errorLocation].Length - 1)
+                                if (errorPosition == changedData[errorLocation].Length - 1)
                                 {
-                                    var symbolFirst = changedData[errorLocation][errorPosition];
-                                    var symbolSecond = changedData[errorLocation][errorPosition + 1];
-                                    changedData[errorLocation] = changedData[errorLocation].Substring(0, errorPosition) + symbolSecond + symbolFirst + changedData[errorLocation].Substring(errorPosition + 2);
-                                }
+                                    errorPosition = errorPosition - 1;
+                                } 
+                                var symbolFirst = changedData[errorLocation][errorPosition];
+                                var symbolSecond = changedData[errorLocation][errorPosition + 1];
+                                changedData[errorLocation].Remove(errorPosition,2);
+                                changedData[errorLocation].Insert(errorPosition, symbolSecond);
+                                changedData[errorLocation].Insert(errorPosition, symbolFirst);
                             }
                             break;
                     }
                 }
 
                 //var splittedResult = fullRecord.Split('@');
-                fullName = changedData[0];
+                /*fullName = changedData[0];
                 stringAdress = changedData[1];
-                phoneNumber = changedData[2];
+                phoneNumber = changedData[2];*/
 
                 var resultRecord = new UserDataModel()
                 {
                     number = newRecordNumber + lengthGeneratedPrev,
                     randomId = Convert.ToString(previousRandomSeed),
-                    fullName = fullName,
-                    adress = stringAdress,
-                    phone = phoneNumber
+                    fullName = fullName.ToString(),
+                    adress = stringAdress.ToString(),
+                    phone = phoneNumber.ToString()
                 };
                 previousRandomSeed = currentRandomSeed;
                 resultingRecords.Add(resultRecord);

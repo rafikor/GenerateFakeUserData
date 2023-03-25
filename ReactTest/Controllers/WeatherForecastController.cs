@@ -15,12 +15,17 @@ namespace ReactTest.Controllers
     [Route("[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        private static Dictionary<string,BaseUserDataGenerator> dataGenerators;
 
         private readonly ILogger<WeatherForecastController> _logger;
+
+        static WeatherForecastController()
+        {
+            dataGenerators = new Dictionary<string,BaseUserDataGenerator>();
+            dataGenerators.Add("USA", new USAUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\USA"));
+            dataGenerators.Add("Belarus", new BelarusUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Belarus"));
+            dataGenerators.Add("Poland", new PolandUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Poland"));
+        }
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
@@ -33,9 +38,7 @@ namespace ReactTest.Controllers
         public IEnumerable<UserDataModel> GetForecast([FromHeader] string selectedRegion,
             [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
-            //var belarusRecordsGenerator = new BelarusUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\belarus");
-            //var polandUserDataGenerator = new PolandUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Poland")
-            var usaUserDataGenerator = new USAUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\USA");
+            BaseUserDataGenerator dataGenerator = dataGenerators[selectedRegion];
 
             int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
             var resultingRecords = new List<UserDataModel>();
@@ -48,7 +51,7 @@ namespace ReactTest.Controllers
             int previousRandomSeed = currentRandomSeed;
             for (int newRecordNumber = 0; newRecordNumber < howMuchGenerate; newRecordNumber++)
             {
-                UserDataModel resultRecord = usaUserDataGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed ,isRegenerateSeed, out currentRandomSeed);
+                UserDataModel resultRecord = dataGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed ,isRegenerateSeed, out currentRandomSeed);
                 resultRecord.number = newRecordNumber + lengthGeneratedPrev + 1;
                 previousRandomSeed = currentRandomSeed;//for repeatability
                 resultingRecords.Add(resultRecord);
@@ -61,8 +64,7 @@ namespace ReactTest.Controllers
         [HttpGet]
         public IEnumerable<string> GetRegions()
         {
-            var regions = new List<string>() { "USA","Belarus", "Poland"};
-            return regions;
+            return dataGenerators.Keys;
         }
     }
 }

@@ -25,9 +25,9 @@ namespace ReactTest.Controllers
         static WeatherForecastController()
         {
             dataGenerators = new Dictionary<string,BaseUserDataGenerator>();
-            dataGenerators.Add("USA", new USAUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\USA"));
-            dataGenerators.Add("Belarus", new BelarusUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Belarus"));
-            dataGenerators.Add("Poland", new PolandUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Poland"));
+            dataGenerators.Add("USA", new USAUserDataGenerator(Path.Combine("data","USA")));
+            dataGenerators.Add("Belarus", new BelarusUserDataGenerator(Path.Combine("data", "Belarus")));
+            dataGenerators.Add("Poland", new PolandUserDataGenerator(Path.Combine("data", "Poland")));
         }
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
@@ -48,7 +48,6 @@ namespace ReactTest.Controllers
             int lengthGeneratedPrev, double errorsPerRecord, int randomSeed, int countToGenerate)
         {
             BaseUserDataGenerator dataGenerator = dataGenerators[selectedRegion];
-
             
             var resultingRecords = new List<UserDataModel>();
             int currentRandomSeed = randomSeed;

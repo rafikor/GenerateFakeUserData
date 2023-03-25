@@ -54,10 +54,17 @@ namespace ReactTest.Utils
             possibleCountryNames = LoadSimpleOneRowFileData(Path.Combine(this.dataFolder, "countryNames.csv"));
             possibleCountryNames.Add("");//there could be no country name at all
         }
-        public UserDataModel GenerateRecord(double errorsPerRecord, int seed, out int newSeed)
+        public UserDataModel GenerateRecord(double errorsPerRecord, int seed, bool isRegenerateSeed, out int newSeed)
         {
-            random = new Random(seed);
+            var recordSeed = seed;
+            random = new Random(recordSeed);
             newSeed = random.Next();
+            if(isRegenerateSeed)
+            {
+                recordSeed = newSeed;
+                random = new Random(recordSeed);
+                newSeed = random.Next();
+            }
             var countryName = possibleCountryNames[random.Next(possibleCountryNames.Count)];
             var street = streets[random.Next(streets.Count)];
 
@@ -79,17 +86,8 @@ namespace ReactTest.Utils
             var buildingNumber = random.Next(1, 101).ToString();
             var roomNumber = random.Next(2) == 0 ? random.Next(1, 81).ToString() : "";
 
-            List<string> adressParts = finishAdressGeneration(index, countryName, livingPlace, whatLivingPlaceType, street, buildingNumber, roomNumber);
-
-            var stringAdress = new StringBuilder();
-            foreach (var adresspart in adressParts)
-            {
-                if (adresspart.Length > 0)
-                {
-                    stringAdress.Append(adresspart + ", ");
-                }
-            }
-            stringAdress.Remove(stringAdress.Length - 2, 2);
+            var stringAdress = finishAdressGeneration(index, countryName, livingPlace, whatLivingPlaceType, street, buildingNumber, roomNumber);
+            
 
             var phoneCodesBeginningFormat = phoneCodesBeginningFormats[random.Next(phoneCodesBeginningFormats.Count)];
             var phoneCodesBeginningNumber = generatePhoneCodeBeginningNumber();
@@ -197,21 +195,21 @@ namespace ReactTest.Utils
             var resultRecord = new UserDataModel()
             {
                 number = -1,//will be set in calling method
-                randomId = Convert.ToString(seed),
+                randomId = recordSeed,
                 fullName = fullName.ToString(),
                 adress = stringAdress.ToString(),
                 phone = phoneNumber.ToString()
             };
             return resultRecord;
         }
-        protected abstract List<string> finishAdressGeneration(string index, string countryName, string livingPlace, TypeOfLivingPlace whatLivingPlaceType, string street, string buildingNumber, string roomNumber);
+        protected abstract StringBuilder finishAdressGeneration(string index, string countryName, string livingPlace, TypeOfLivingPlace whatLivingPlaceType, string street, string buildingNumber, string roomNumber);
 
         protected abstract string generatePhoneCodeBeginningNumber();
 
         protected List<string> LoadSimpleOneRowFileData(string filePath, bool skipIfNotExists=false)
         {
             var result = new List<string>();
-            if (File.Exists(filePath) || skipIfNotExists)
+            if (File.Exists(filePath) || !skipIfNotExists)
             {
                 var csvRows = System.IO.File.ReadAllLines(filePath, Encoding.UTF8).ToList();
                 foreach (var row in csvRows)

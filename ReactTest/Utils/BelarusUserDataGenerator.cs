@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Text;
 
 namespace ReactTest.Utils
 {
@@ -24,7 +25,7 @@ namespace ReactTest.Utils
             postIndexRange = (210000, 247999);
         }
         
-        protected override List<string> finishAdressGeneration(string index, string countryName, string livingPlace, TypeOfLivingPlace whatLivingPlaceType, string street, string buildingNumber, string roomNumber)
+        protected override StringBuilder finishAdressGeneration(string index, string countryName, string livingPlace, TypeOfLivingPlace whatLivingPlaceType, string street, string buildingNumber, string roomNumber)
         {
             var building = "б. " + buildingNumber;
             var part = random.Next(3) == 0 ? "" : "к. " + random.Next(1, 4).ToString();
@@ -54,7 +55,17 @@ namespace ReactTest.Utils
                 }
             }
 
-            return adress;
+            var stringAdress = new StringBuilder();
+            foreach (var adresspart in adress)
+            {
+                if (adresspart.Length > 0)
+                {
+                    stringAdress.Append(adresspart + ", ");
+                }
+            }
+            stringAdress.Remove(stringAdress.Length - 2, 2);
+
+            return stringAdress;
         }
 
         protected override string generatePhoneCodeBeginningNumber()

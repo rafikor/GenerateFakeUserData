@@ -1,0 +1,12 @@
+https://www.kaggle.com/datasets/djablo/list-of-polish-first-and-last-names?resource=download
+
+https://ug.edu.pl/sites/default/files/_nodes/komunikat/39295/files/wytyczne_prawidlowego_adresowania.pdf:
+ Улица, номер дома и квартиры или квартиры - в случае н.п., разделенного на улицы, или название н.п. и порядковый номер недвижимости - в случае н.п., не разделенного на улицы. Потом идет индекс и название н.п.
+
+Получается, надо знать тип н.п. (город/деревня) и в зависимости от этого решать, может ли быть адрес без улицы. В конце можно добавить название страны
+
+https://pl.wikipedia.org/wiki/Kategoria:Ulice_w_Warszawie
+https://pl.wikipedia.org/wiki/Kategoria:Ulice_we_Wroc%C5%82awiu
+https://pl.wikipedia.org/wiki/Miasta_w_Polsce
+https://www.polskawliczbach.pl/Wsie - деревни
+https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD%D0%BD%D1%8B%D0%B9_%D0%BF%D0%BB%D0%B0%D0%BD_%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D0%B8_%D0%9F%D0%BE%D0%BB%D1%8C%D1%88%D0%B8 - телефоны в Польше

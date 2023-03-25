@@ -11,7 +11,7 @@ export class Home extends Component {
         super(props);
         this.state = {
             loading: true, regions: [], value: '',
-            items: [], errorsPerRecord: 5, randomSeed:3
+            items: [], errorsPerRecord: 5, randomSeed:306412873, oldSeed:0
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
@@ -132,12 +132,16 @@ export class Home extends Component {
             newItems.push(i)
         }*/
 
+        let currentRandomSeedToSend = this.state.randomSeed;
+        if (page != 0) {
+            currentRandomSeedToSend = this.state.oldSeed;
+        }
 
         const requestOptions = {
             method: 'POST',
             headers: {
                 selectedRegion: this.state.value, lengthGeneratedPrev: page == 0 ?0:this.state.items.length,
-                errorsPerRecord: this.state.errorsPerRecord, randomSeed: this.state.randomSeed
+                errorsPerRecord: this.state.errorsPerRecord, randomSeed: currentRandomSeedToSend
             }
             //headers: { 'Content-Type': 'application/json' },
             //body: formData//JSON.stringify({ title: 'React POST Request Example' })
@@ -147,6 +151,8 @@ export class Home extends Component {
         for (let i = 0; i < data.length; i++) {
             newItems.push(data[i]);
         }
+        console.log(data.length);
+        this.setState({ oldSeed: data[data.length - 1].randomId });
         //this.setState({ forecasts: data, loading: false });
 
         /*if (page === 100) {

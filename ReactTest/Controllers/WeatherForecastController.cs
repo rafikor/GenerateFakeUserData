@@ -33,18 +33,25 @@ namespace ReactTest.Controllers
         public IEnumerable<UserDataModel> GetForecast([FromHeader] string selectedRegion,
             [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
-            var belarusRecordsGenerator = new BelarusUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\belarus");
+            //var belarusRecordsGenerator = new BelarusUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\belarus");
+            var polandUserDataGenerator = new PolandUserDataGenerator("E:\\programming\\Itransition\\ReactTest\\data\\Poland");
 
             int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
             var resultingRecords = new List<UserDataModel>();
             int currentRandomSeed = randomSeed;
-            int previousRandomSeed = randomSeed;
+            bool isRegenerateSeed = false;
+            if (lengthGeneratedPrev>0)
+            {
+                isRegenerateSeed = true;
+            }
+            int previousRandomSeed = currentRandomSeed;
             for (int newRecordNumber = 0; newRecordNumber < howMuchGenerate; newRecordNumber++)
             {
-                UserDataModel resultRecord = belarusRecordsGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed, out currentRandomSeed);
-                previousRandomSeed = currentRandomSeed;
-                resultRecord.number = newRecordNumber + lengthGeneratedPrev;
+                UserDataModel resultRecord = polandUserDataGenerator.GenerateRecord(errorsPerRecord, previousRandomSeed ,isRegenerateSeed, out currentRandomSeed);
+                resultRecord.number = newRecordNumber + lengthGeneratedPrev + 1;
+                previousRandomSeed = currentRandomSeed;//for repeatability
                 resultingRecords.Add(resultRecord);
+                isRegenerateSeed = false;
             }
 
             return resultingRecords;

@@ -5,13 +5,16 @@ export class Home extends Component {
     static displayName = Home.name;
     static minRandomNumber = 0;
     static maxRandomNumber = 2147483647;
+    static minErrorsPerRecord = 0;
+    static maxErrorsPerRecord = 10000;
     
 
     constructor(props) {
         super(props);
         this.state = {
             loading: true, regions: [], selectedRegion: '',
-            items: [], errorsPerRecord: 5, randomSeed:306412873, oldSeed:0
+            items: [], errorsPerRecord: 5, randomSeed: 306412873, oldSeed: 0,
+            messageRandomSeed: '', messageErrorsPerRecord:''
         };
         this.handleChangeRegion = this.handleChangeRegion.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
@@ -26,16 +29,30 @@ export class Home extends Component {
     };
 
     handleChangeSlider(event) {
-        if (event.target.value >= 0) {
+        if (event.target.value >= Home.minErrorsPerRecord && event.target.value <= Home.maxErrorsPerRecord) {
             this.setState({ errorsPerRecord: event.target.value }, () => { this.fetchData(0); });
+            this.setState({ messageErrorsPerRecord: ""});
+        }
+        else {
+            this.setState({
+                messageErrorsPerRecord: "You can set number of errors per record between "
+                    + Home.minErrorsPerRecord + " and " + Home.maxErrorsPerRecord
+            });
         }
     };
 
     handleChangeRandomID(event) {
-        this.setState({ randomSeed: event.target.value }, () => { this.fetchData(0); });
+        if (event.target.value >= Home.minRandomNumber && event.target.value <= Home.maxRandomNumber) {
+            this.setState({ randomSeed: event.target.value }, () => { this.fetchData(0); });
+            this.setState({ messageRandomSeed: "" });
+        }
+        else {
+            this.setState({
+                messageRandomSeed: "You can use values between "
+                    + Home.minRandomNumber + " and " + Home.maxRandomNumber
+            });
+        }
     };
-
-    
 
     handleDownloadCSV(event) {
         const requestOptions = {
@@ -76,6 +93,7 @@ export class Home extends Component {
     handleGenerateRandomID(event) {
         let random = this.randomNumberInRange(Home.minRandomNumber, Home.maxRandomNumber);
         this.setState({ randomSeed: random }, () => { this.fetchData(0); });
+        this.setState({ messageRandomSeed: "" });
     };
 
     componentDidMount() {
@@ -181,20 +199,19 @@ export class Home extends Component {
     renderSlider(value, handleChangeSlider) {
         return (
             <div>
+                Errors per record:&nbsp;
                 <input
                     type="number"
                     value={value}
                     onChange={handleChangeSlider}
-                  />
+                />
+                &nbsp;{this.state.messageErrorsPerRecord}
                 <div className="slider-parent">
                     <input type="range" min="0" max="10" step="0.25"
                         onChange={handleChangeSlider}
                         value={value}
 
                     />
-                    <div className="buble">
-                        {value}
-                    </div>
                 </div>
             </div>
         );
@@ -209,7 +226,8 @@ export class Home extends Component {
                     value={value}
                     onChange={this.handleChangeRandomID}
                 />
-                    <button variant="contained" onClick={this.handleGenerateRandomID}>Update</button>
+                <button variant="contained" onClick={this.handleGenerateRandomID}>Update</button>
+                &nbsp;{this.state.messageRandomSeed}
             </div>
         );
     }
@@ -250,8 +268,11 @@ export class Home extends Component {
                 <p>This application demonstrates generation of fake user data for different regions.</p>
                 
                 {contentsRegions}
+                <br />
                 {contentsRandomNumber}
+                <br/>
                 {contentsRenderSlider}
+                <br />
                 {contentsRenderDownloadCSV}
                 {contentsInfiniteScroll}
             </div>

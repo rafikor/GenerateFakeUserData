@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 export class Home extends Component {
     static displayName = Home.name;
     static minRandomNumber = 0;
-    static maxRandomNumber = 4294967295;
+    static maxRandomNumber = 2147483647;
     
 
     constructor(props) {

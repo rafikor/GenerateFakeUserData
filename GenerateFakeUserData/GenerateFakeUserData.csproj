@@ -25,6 +25,148 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="data\belarus\cities.csv" />
+    <None Remove="data\belarus\countryNames.csv" />
+    <None Remove="data\belarus\female names.txt" />
+    <None Remove="data\belarus\female patronymics.txt" />
+    <None Remove="data\belarus\female surnames.txt" />
+    <None Remove="data\belarus\majorCities.csv" />
+    <None Remove="data\belarus\male names.txt" />
+    <None Remove="data\belarus\male patronymics.txt" />
+    <None Remove="data\belarus\male surnames.txt" />
+    <None Remove="data\belarus\regions.csv" />
+    <None Remove="data\belarus\streets.csv" />
+    <None Remove="data\belarus\villages.csv" />
+    <None Remove="data\belarus\villageSoviets.csv" />
+    <None Remove="data\poland\cities.csv" />
+    <None Remove="data\poland\countryNames.csv" />
+    <None Remove="data\poland\female names.txt" />
+    <None Remove="data\poland\female surnames.txt" />
+    <None Remove="data\poland\gminas.csv" />
+    <None Remove="data\poland\majorCities.csv" />
+    <None Remove="data\poland\male names.txt" />
+    <None Remove="data\poland\male surnames.txt" />
+    <None Remove="data\poland\powiats.csv" />
+    <None Remove="data\poland\streets.csv" />
+    <None Remove="data\poland\villages.csv" />
+    <None Remove="data\poland\wojewodztwa.csv" />
+    <None Remove="data\USA\cities.csv" />
+    <None Remove="data\USA\countryNames.csv" />
+    <None Remove="data\USA\female names.txt" />
+    <None Remove="data\USA\majorCities.csv" />
+    <None Remove="data\USA\male names.txt" />
+    <None Remove="data\USA\male surnames.txt" />
+    <None Remove="data\USA\states.csv" />
+    <None Remove="data\USA\streets.csv" />
+    <None Remove="data\USA\villages.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="data\belarus\cities.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\countryNames.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\female names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\female patronymics.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\female surnames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\majorCities.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\male names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\male patronymics.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\male surnames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\regions.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\streets.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\villages.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\belarus\villageSoviets.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\cities.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\countryNames.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\female names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\female surnames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\gminas.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\majorCities.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\male names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\male surnames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\powiats.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\streets.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\villages.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\poland\wojewodztwa.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\cities.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\countryNames.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\female names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\majorCities.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\male names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\male surnames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\states.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\streets.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\USA\villages.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

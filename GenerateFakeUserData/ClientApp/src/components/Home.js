@@ -157,42 +157,45 @@ export class Home extends Component {
 
     renderInfiniteScroll() {
         return (
-            <InfiniteScroll
-                dataLength={this.state.items.length}
-                next={this.fetchData}
-                hasMore="true"
-                loader={<h4>Loading...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>You have seen it all</b>
-                    </p>
-                }
-            >
-            <table className='table table-striped' aria-labelledby="tabelLabelTable">
-                <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Random identifier</th>
-                            <th>Full name</th>
-                            <th>Adress</th>
-                            <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    {this.state.items.map((item, index) => 
-                        <tr key={item.number}>
-                            <td>{item.number}</td>
-                            <td>{item.randomId}</td>
-                            <td>{item.fullName}</td>
-                            <td>{item.adress}</td>
-                            <td>{item.phone}</td>
+            <div id="scrollableDiv" style={{ height: "300px", overflowY: "scroll" }}>
+                <InfiniteScroll
+                    dataLength={this.state.items.length}
+                    next={this.fetchData}
+                    hasMore="true"
+                    loader={<h4>Loading...</h4>}
+                    scrollableTarget="scrollableDiv"
+                    endMessage={
+                        <p style={{ textAlign: 'center' }}>
+                            <b>You have seen it all</b>
+                        </p>
+                    }
+                >
+                <table className='table table-striped' aria-labelledby="tabelLabelTable">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Random identifier</th>
+                                <th>Full name</th>
+                                <th>Adress</th>
+                                <th>Phone</th>
                         </tr>
-                    )}
+                    </thead>
+                    <tbody>
                     
-                </tbody>
+                        {this.state.items.map((item, index) => 
+                            <tr key={item.number}>
+                                <td>{item.number}</td>
+                                <td>{item.randomId}</td>
+                                <td>{item.fullName}</td>
+                                <td>{item.adress}</td>
+                                <td>{item.phone}</td>
+                            </tr>
+                        )}
+                    
+                    </tbody>
                 </table>
-            </InfiniteScroll>
+                </InfiniteScroll>
+            </div>
         );
     }
 
@@ -273,8 +276,8 @@ export class Home extends Component {
                 <br/>
                 {contentsRenderSlider}
                 <br />
-                {contentsRenderDownloadCSV}
                 {contentsInfiniteScroll}
+                {contentsRenderDownloadCSV}
             </div>
         );
     }

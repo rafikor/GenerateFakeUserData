@@ -54,17 +54,9 @@ namespace GenerateFakeUserData.Utils
             possibleCountryNames = LoadSimpleOneRowFileData(Path.Combine(this.dataFolder, "countryNames.csv"));
             possibleCountryNames.Add("");//there could be no country name at all
         }
-        public UserDataModel GenerateRecord(double errorsPerRecord, int seed, bool isRegenerateSeed, out int newSeed)
+
+        private StringBuilder GenerateAdress()
         {
-            var recordSeed = seed;
-            random = new Random(recordSeed);
-            newSeed = random.Next();
-            if(isRegenerateSeed)
-            {
-                recordSeed = newSeed;
-                random = new Random(recordSeed);
-                newSeed = random.Next();
-            }
             var countryName = possibleCountryNames[random.Next(possibleCountryNames.Count)];
             var street = streets[random.Next(streets.Count)];
 
@@ -87,12 +79,15 @@ namespace GenerateFakeUserData.Utils
             var roomNumber = random.Next(2) == 0 ? random.Next(1, 81).ToString() : "";
 
             var stringAdress = finishAdressGeneration(index, countryName, livingPlace, whatLivingPlaceType, street, buildingNumber, roomNumber);
-            
+            return stringAdress;
+        }
 
+        private StringBuilder GeneratePhoneNumber()
+        {
             var phoneCodesBeginningFormat = phoneCodesBeginningFormats[random.Next(phoneCodesBeginningFormats.Count)];
             var phoneCodesBeginningNumber = generatePhoneCodeBeginningNumber();
             var phoneCodesBeginning = phoneCodesBeginningFormat.Replace("x", phoneCodesBeginningNumber);
-            
+
             var phoneEndFormat = phoneEndFormats[random.Next(phoneEndFormats.Count)];
             var phoneEnd = "";
             for (var i = 0; i < phoneEndFormat.Length; i++)
@@ -109,8 +104,11 @@ namespace GenerateFakeUserData.Utils
             var phoneNumber = new StringBuilder();
             phoneNumber.Append(phoneCodesBeginning);
             phoneNumber.Append(phoneEnd);
+            return phoneNumber;
+        }
 
-
+        private StringBuilder GenerateFullName()
+        {
             var fullName = new StringBuilder();
 
             bool isMale = random.Next(2) == 0;
@@ -143,8 +141,12 @@ namespace GenerateFakeUserData.Utils
                     }
                 }
             }
+            return fullName;
+        }
 
-        int intPartOfErrorsPerRecord = (int)errorsPerRecord;
+        private void IntroduceErrors(StringBuilder fullName, StringBuilder stringAdress, StringBuilder phoneNumber, double errorsPerRecord)
+        {
+            int intPartOfErrorsPerRecord = (int)errorsPerRecord;
             double floatPartOfErrorsPerRecord = errorsPerRecord - intPartOfErrorsPerRecord;
             int intErrorsPerRecord = intPartOfErrorsPerRecord;
             var rnd01 = random.NextDouble();
@@ -153,7 +155,6 @@ namespace GenerateFakeUserData.Utils
                 intErrorsPerRecord += 1;
             }
 
-            //string fullRecord = fullName + '@' + stringAdress + '@' + phoneNumber;
             var changedData = new StringBuilder[] { fullName, stringAdress, phoneNumber };
             for (int i = 0; i < intErrorsPerRecord; i++)
             {
@@ -172,8 +173,6 @@ namespace GenerateFakeUserData.Utils
                     case 1://add
                         var symbolToAdd = errorLocation == 2 ? random.Next(10).ToString() : alphabet[random.Next(alphabet.Length)].ToString();
                         changedData[errorLocation].Insert(errorPosition, symbolToAdd);
-                        //changedData[errorLocation] = changedData[errorLocation].Substring(0, errorPosition) +
-                        //    symbolToAdd + changedData[errorLocation].Substring(errorPosition);
                         break;
                     default://swap
                         if (changedData[errorLocation].Length > 1)
@@ -191,6 +190,27 @@ namespace GenerateFakeUserData.Utils
                         break;
                 }
             }
+        }
+
+        public UserDataModel GenerateRecord(double errorsPerRecord, int seed, bool isRegenerateSeed, out int newSeed)
+        {
+            var recordSeed = seed;
+            random = new Random(recordSeed);
+            newSeed = random.Next();
+            if(isRegenerateSeed)
+            {
+                recordSeed = newSeed;
+                random = new Random(recordSeed);
+                newSeed = random.Next();
+            }
+
+            var stringAdress = GenerateAdress();
+
+            var phoneNumber = GeneratePhoneNumber();
+
+            var fullName = GenerateFullName();
+
+            IntroduceErrors(fullName, stringAdress, phoneNumber, errorsPerRecord);
 
             var resultRecord = new UserDataModel()
             {
@@ -227,7 +247,6 @@ namespace GenerateFakeUserData.Utils
             var result = array[random.Next(array.Count)];
             return result;
         }
-
     }
 
     public enum TypeOfLivingPlace { majorCity, usualCity, villageAndSimilar };

@@ -35,7 +35,7 @@ namespace GenerateFakeUserData.Utils
             var building = buildingNumber;
             var part = random.Next(3) == 0 ? "" : ((char)('A'+random.Next(4))).ToString();
 
-            var room = roomNumber != "" || random.Next(2) == 0 ? "m " + roomNumber : "";
+            var room = roomNumber != ""&& random.Next(2) == 0 ? "m " + roomNumber : "";
 
             var wojewodztwo = wojewodztwa[random.Next(wojewodztwa.Count)];
             var powiat = powiats[random.Next(powiats.Count)];

@@ -57,6 +57,9 @@ namespace GenerateFakeUserData.Utils
 
         private StringBuilder GenerateAdress()
         {
+            int maxBuildingNumber = 100;
+            int maxRoomNumber = 80;
+
             var countryName = possibleCountryNames[random.Next(possibleCountryNames.Count)];
             var street = streets[random.Next(streets.Count)];
 
@@ -75,8 +78,8 @@ namespace GenerateFakeUserData.Utils
                     break;
             }
             var index = random.Next(postIndexRange.Item1, postIndexRange.Item2).ToString();
-            var buildingNumber = random.Next(1, 101).ToString();
-            var roomNumber = random.Next(2) == 0 ? random.Next(1, 81).ToString() : "";
+            var buildingNumber = random.Next(1, maxBuildingNumber + 1).ToString();
+            var roomNumber = random.Next(2) == 0 ? random.Next(1, maxRoomNumber + 1).ToString() : "";
 
             var stringAdress = finishAdressGeneration(index, countryName, livingPlace, whatLivingPlaceType, street, buildingNumber, roomNumber);
             return stringAdress;

@@ -28,9 +28,12 @@ namespace GenerateFakeUserData.Utils
         protected override StringBuilder finishAdressGeneration(string index, string countryName, string livingPlace, TypeOfLivingPlace whatLivingPlaceType, string street, string buildingNumber, string roomNumber)
         {
             var building = "б. " + buildingNumber;
-            var part = random.Next(3) == 0 ? "" : "к. " + random.Next(1, 4).ToString();
 
-            var room = part != "" || random.Next(2) == 0 ? "кв. " + roomNumber : "";
+            int maxBuildingPartNumber = 3;
+            int optionsToCorrectProbability = 3;
+            var part = random.Next(optionsToCorrectProbability) == 0 ? "" : "к. " + random.Next(1, maxBuildingPartNumber+1).ToString();
+
+            var room = roomNumber!="" && random.Next(2) == 0 ? "кв. " + roomNumber : "";
 
             var villageSoviet = villageSovets[random.Next(villageSovets.Count)];
 

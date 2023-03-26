@@ -31,7 +31,7 @@ namespace GenerateFakeUserData.Controllers
         public IEnumerable<UserDataModel> GetNewData([FromHeader] string selectedRegion,
             [FromHeader] int lengthGeneratedPrev, [FromHeader] double errorsPerRecord, [FromHeader] int randomSeed)
         {
-            int howMuchGenerate = lengthGeneratedPrev == 0 ? 10 : 5;
+            int howMuchGenerate = lengthGeneratedPrev == 0 ? 20 : 10;
             return GenerateRecords(selectedRegion,
             lengthGeneratedPrev, errorsPerRecord, randomSeed, howMuchGenerate);
         }

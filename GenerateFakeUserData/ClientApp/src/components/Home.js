@@ -6,7 +6,7 @@ export class Home extends Component {
     static minRandomNumber = 0;
     static maxRandomNumber = 2147483647;
     static minErrorsPerRecord = 0;
-    static maxErrorsPerRecord = 10000;
+    static maxErrorsPerRecord = 1000;
     
 
     constructor(props) {
@@ -104,13 +104,13 @@ export class Home extends Component {
         const newItems = [];
 
         let currentRandomSeedToSend = this.state.randomSeed;
-        if (page != 0) {
+        if (page !== 0) {
             currentRandomSeedToSend = this.state.oldSeed;
         }
         const requestOptions = {
             method: 'POST',
             headers: {
-                selectedRegion: this.state.selectedRegion, lengthGeneratedPrev: page == 0 ?0:this.state.items.length,
+                selectedRegion: this.state.selectedRegion, lengthGeneratedPrev: page === 0 ?0:this.state.items.length,
                 errorsPerRecord: this.state.errorsPerRecord, randomSeed: currentRandomSeedToSend
             }
         };
@@ -121,7 +121,7 @@ export class Home extends Component {
         }
         this.setState({ oldSeed: data[data.length - 1].randomId });
 
-        if (page == 0) {
+        if (page === 0) {
             this.setState({ items: newItems })
         }
         else {

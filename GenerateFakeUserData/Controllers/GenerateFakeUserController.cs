@@ -1,14 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GenerateFakeUserData.Models;
-using System.Formats.Asn1;
-using System.Globalization;
-using System;
-using Microsoft.AspNetCore.Hosting.Server;
-using System.Text;
-using Microsoft.Net.Http.Headers;
-using System.Collections.Generic;
 using GenerateFakeUserData.Utils;
-using Microsoft.AspNetCore.WebUtilities;
 using ServiceStack.Text;
 using ServiceStack;
 

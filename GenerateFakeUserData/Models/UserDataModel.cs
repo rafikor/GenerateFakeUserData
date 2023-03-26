@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace GenerateFakeUserData.Models
+﻿namespace GenerateFakeUserData.Models
 {
     public class UserDataModel
     {

@@ -137,11 +137,11 @@ export class Home extends Component {
 
                     Target region:&nbsp;
 
-                    <select value={value} onChange={handleChange}>
+                    <select onChange={handleChange}>
 
                         {regions.map((option) => (
 
-                            <option value={option}>{option}</option>
+                            <option key={option} value={option}>{option}</option>
 
                         ))}
 
@@ -175,15 +175,15 @@ export class Home extends Component {
                         <tr>
                             <th>Index</th>
                             <th>Random identifier</th>
-                                <th>Full name</th>
-                                <th>Adress</th>
-                                <th>Phone</th>
+                            <th>Full name</th>
+                            <th>Adress</th>
+                            <th>Phone</th>
                         </tr>
                     </thead>
                     <tbody>
                     
-                        {this.state.items.map((item, index) => 
-                            <tr key={item.number}>
+                            {this.state.items.map((item, index) =>
+                                <tr key={item.number + Math.random()}>
                                 <td>{item.number}</td>
                                 <td>{item.randomId}</td>
                                 <td>{item.fullName}</td>

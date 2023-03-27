@@ -150,7 +150,7 @@ namespace GenerateFakeUserData.Utils
             double floatPartOfErrorsPerRecord = errorsPerRecord - intPartOfErrorsPerRecord;
             int intErrorsPerRecord = intPartOfErrorsPerRecord;
             var rnd01 = random.NextDouble();
-            if (rnd01 < floatPartOfErrorsPerRecord)
+           if (rnd01 < floatPartOfErrorsPerRecord)
             {
                 intErrorsPerRecord += 1;
             }
@@ -184,8 +184,8 @@ namespace GenerateFakeUserData.Utils
                             var symbolFirst = changedData[errorLocation][errorPosition];
                             var symbolSecond = changedData[errorLocation][errorPosition + 1];
                             changedData[errorLocation].Remove(errorPosition, 2);
-                            changedData[errorLocation].Insert(errorPosition, symbolSecond);
                             changedData[errorLocation].Insert(errorPosition, symbolFirst);
+                            changedData[errorLocation].Insert(errorPosition, symbolSecond);
                         }
                         break;
                 }
